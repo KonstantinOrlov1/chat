@@ -32,6 +32,10 @@ function onSocketConnect(ws) {
     const activeClient = ws.clientId;
     clients.delete(activeClient);
 
+    let obj = {
+      type: "apponentIsOflain",
+    };
+
     for (let client of clients) {
       client.send(`Пользователь ${activeClient} вышел из чата`, {
         binary: false,

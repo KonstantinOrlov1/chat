@@ -1,0 +1,24 @@
+.left {
+  padding: 5px;
+  border-radius: 6px 6px 6px 0px;
+  float: left;
+  background-color: rgb(114, 114, 221);
+}
+
+.rigth {
+  padding: 5px;
+  border-radius: 6px 6px 0px 6px;
+  float: right;
+  background-color: rgb(241, 22, 22);
+}
+
+.chat {
+  width: 600px;
+}
+
+.message {
+  padding: 0 5px 0 5px;
+  margin-bottom: 10px;
+  width: 100%;
+  height: 40px;
+}

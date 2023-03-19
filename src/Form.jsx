@@ -1,47 +1,53 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import styles from "./styles.css";
+
+export const Message = ({ id, text, external }) => {
+  return (
+    <div className="message">
+      <div className={external ? "left" : "rigth"}>
+        <div>{new Date(+id).toISOString()}</div>
+        <div>{text}</div>
+      </div>
+    </div>
+  );
+};
 
 export const Form = () => {
   const url = "ws://localhost:3001";
 
-  let socket = new WebSocket(url);
-  socket.binaryType = "arraybuffer";
+  const [data, setData] = useState({});
 
-  const [data, setData] = useState("");
-  const [dataArr, setDataArr] = useState([]);
+  const socket = useRef();
+
+  const createMessege = (text, external) => {
+    let id = Date.now();
+    setData((v) => ({
+      ...v,
+      [id]: {
+        text,
+        external,
+      },
+    }));
+  };
 
   useEffect(() => {
-    socket.onmessage = (event) => {
-      const data = event.data;
-      setData(data);
-      setDataArr((dataArr) => [...dataArr, data]);
+    socket.current = new WebSocket(url);
+    socket.current.onmessage = (event) => {
+      createMessege(event.data, true);
+    };
+
+    return () => {
+      socket.current.close();
     };
   }, []);
-
-  console.log(dataArr);
-
-  // const createElement = (data) => {
-  //   let messageElem = document.createElement("div");
-  //   messageElem.textContent = data;
-  //   return messageElem;
-  // };
-
-  // const renderServer = (data) => {
-  //   const messageElem = createElement(data);
-  //   document.getElementById("chat").append(messageElem);
-  // };
-
-  // const renderClient = (data) => {
-  //   const messageElem = createElement(data);
-  //   messageElem.style.color = "red";
-  //   document.getElementById("chat").append(messageElem);
-  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const textareaValue = e.target.querySelector("textarea").value;
-    socket.send(textareaValue);
-    // renderClient(textareaValue);
+    socket.current.send(textareaValue);
+
+    createMessege(textareaValue, false);
 
     e.target.reset();
     return false;
@@ -53,9 +59,9 @@ export const Form = () => {
         <textarea></textarea>
         <button type="submit">Сохранить сообщение</button>
       </form>
-      <div>
-        {dataArr.map((elem, index) => {
-          return <div key={index}>{elem}</div>;
+      <div className="chat">
+        {Object.keys(data).map((id, index) => {
+          return <Message {...data[id]} key={index} id={id} />;
         })}
       </div>
     </>
