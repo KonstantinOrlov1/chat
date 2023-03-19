@@ -1,6 +1,3 @@
-import { useDispatch } from "react-redux";
-import { messegeSlice } from "./store/messege";
-
 export const Form = () => {
   const url = "ws://localhost:3001";
   let socket = new WebSocket(url);
@@ -28,13 +25,10 @@ export const Form = () => {
     document.getElementById("chat").append(messageElem);
   };
 
-  // const dispatch = useDispatch();
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const textareaValue = e.target.querySelector("textarea").value;
-    // dispatch(messegeSlice.actions.submit(textareaValue));
     socket.send(textareaValue);
     renderClient(textareaValue);
 
