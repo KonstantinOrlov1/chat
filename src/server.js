@@ -30,7 +30,7 @@ function onSocketConnect(ws) {
   ws.on("close", function () {
     console.log(`подключение закрыто`);
     const activeClient = ws.clientId;
-    clients.delete(ws);
+    clients.delete(activeClient);
 
     for (let client of clients) {
       client.send(`Пользователь ${activeClient} вышел из чата`, {
