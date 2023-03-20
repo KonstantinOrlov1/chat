@@ -17,7 +17,6 @@ function onSocketConnect(ws) {
   clients.add(ws);
 
   ws.on("message", function (message) {
-    console.log(`получено сообщение: ${message}`);
     const activeClient = ws.clientId;
 
     for (let client of clients) {
@@ -28,13 +27,8 @@ function onSocketConnect(ws) {
   });
 
   ws.on("close", function () {
-    console.log(`подключение закрыто`);
     const activeClient = ws.clientId;
     clients.delete(activeClient);
-
-    let obj = {
-      type: "apponentIsOflain",
-    };
 
     for (let client of clients) {
       client.send(`Пользователь ${activeClient} вышел из чата`, {

@@ -1,16 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "./styles.css";
-
-export const Message = ({ id, text, external }) => {
-  return (
-    <div className="message">
-      <div className={external ? "left" : "rigth"}>
-        <div>{new Date(+id).toISOString()}</div>
-        <div>{text}</div>
-      </div>
-    </div>
-  );
-};
+import { Message } from "./Message";
+import "./styles.css";
 
 export const Form = () => {
   const url = "ws://localhost:3001";
