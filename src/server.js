@@ -8,10 +8,10 @@ wss.on("connection", function (ws) {
 });
 
 function onSocketConnect(ws) {
-  const a = new Date();
+  const date = new Date();
 
   if (!ws.clientId) {
-    ws.clientId = a.getTime();
+    ws.clientId = date.getTime();
   }
 
   clients.add(ws);
