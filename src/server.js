@@ -16,25 +16,23 @@ function onSocketConnect(ws) {
 
   clients.add(ws);
 
-  const data = {};
-
   ws.on("message", function (message) {
     const activeClient = ws.clientId;
-    data.type = "messege";
+    console.log(message);
 
-    for (let client of clients) {
-      if (client.clientId !== activeClient) {
-        client.send(JSON.stringify(data), { binary: false });
-      }
-    }
+    // for (let client of clients) {
+    //   if (client.clientId !== activeClient) {
+    //     client.send(JSON.stringify(data), { binary: false });
+    //   }
+    // }
   });
 
   ws.on("close", function () {
     const activeClient = ws.clientId;
     clients.delete(activeClient);
 
-    data.type = "clientLoggedOut";
-    data.content = `Пользователь ${activeClient} вышел из чата`;
+    // data.type = "clientLoggedOut";
+    // data.content = `Пользователь ${activeClient} вышел из чата`;
 
     for (let client of clients) {
       client.send(JSON.stringify(data), {
