@@ -16,12 +16,15 @@ function onSocketConnect(ws) {
 
   clients.add(ws);
 
+  const data = {};
+
   ws.on("message", function (message) {
     const activeClient = ws.clientId;
+    data.type = "messege";
 
     for (let client of clients) {
       if (client.clientId !== activeClient) {
-        client.send(message, { binary: false });
+        client.send(JSON.stringify(data), { binary: false });
       }
     }
   });
@@ -30,8 +33,11 @@ function onSocketConnect(ws) {
     const activeClient = ws.clientId;
     clients.delete(activeClient);
 
+    data.type = "clientLoggedOut";
+    data.content = `Пользователь ${activeClient} вышел из чата`;
+
     for (let client of clients) {
-      client.send(`Пользователь ${activeClient} вышел из чата`, {
+      client.send(JSON.stringify(data), {
         binary: false,
       });
     }
