@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Exit } from "./Exit";
 import { Message } from "./Message";
 import "./styles.css";
 
@@ -6,10 +7,14 @@ export const Form = () => {
   const url = "ws://localhost:3001";
 
   const [data, setData] = useState({});
-  const [showClientLoggedOut, setShowClientLoggedOut] = useState(false);
+  const [exit, setExit] = useState([]);
 
   const socket = useRef();
   const textareaField = useRef();
+
+  const createExit = (text) => {
+    setExit((v) => [...v, text]);
+  };
 
   const createMessege = (text, external) => {
     let id = Date.now();
@@ -26,17 +31,17 @@ export const Form = () => {
     socket.current = new WebSocket(url);
     socket.current.onmessage = (event) => {
       const externalData = JSON.parse(event.data);
-      console.log(externalData);
 
-      // switch (externalData.type) {
-      //   case "messege":
-      //     createMessege(externalData.content, true);
-      //     break;
-      //   case "clientLoggedOut":
-      //     setShowClientLoggedOut(true);
-
-      //     setTimeout(setShowClientLoggedOut(false), 3000);
-      // }
+      switch (externalData.type) {
+        case "messege":
+          createMessege(externalData.content, true);
+          break;
+        case "clientLoggedOut":
+          createExit(externalData.content);
+          break;
+        default:
+          createMessege("Неизвестное значение", true);
+      }
     };
 
     return () => {
@@ -62,12 +67,19 @@ export const Form = () => {
         <textarea ref={textareaField}></textarea>
         <button type="submit">Сохранить сообщение</button>
       </form>
-      <div className="chat">
-        {Object.keys(data).map((id, index) => {
-          return <Message {...data[id]} key={index} id={id} />;
-        })}
-
-        {showClientLoggedOut ? <div>Покинул чат</div> : null}
+      <div className="container">
+        <div className="chat">
+          {Object.keys(data).map((id, index) => {
+            return <Message {...data[id]} key={index} id={id} />;
+          })}
+        </div>
+        {exit.length === 0 ? null : (
+          <div className="exit_container">
+            {exit.map((elem, index) => (
+              <Exit key={index} text={elem} />
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
