@@ -20,7 +20,7 @@ function onSocketConnect(ws) {
 
   ws.on("message", function (message) {
     const activeClient = ws.clientId;
-    data.type = "messege";
+    data.type = "message";
     data.content = message.toString();
 
     for (let client of clients) {

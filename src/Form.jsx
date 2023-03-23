@@ -33,7 +33,7 @@ export const Form = () => {
       const externalData = JSON.parse(event.data);
 
       switch (externalData.type) {
-        case "messege":
+        case "message":
           createMessege(externalData.content, true);
           break;
         case "clientLoggedOut":
@@ -67,12 +67,14 @@ export const Form = () => {
         <textarea ref={textareaField}></textarea>
         <button type="submit">Сохранить сообщение</button>
       </form>
+
       <div className="container">
         <div className="chat">
           {Object.keys(data).map((id, index) => {
             return <Message {...data[id]} key={index} id={id} />;
           })}
         </div>
+
         {exit.length === 0 ? null : (
           <div className="exit_container">
             {exit.map((elem, index) => (
