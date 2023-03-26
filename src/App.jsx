@@ -1,5 +1,11 @@
 import { Form } from "./Form";
+import { UploadModal } from "./rrr";
 
 export const App = () => {
-  return <Form />;
+  return (
+    <>
+      <Form />
+      <UploadModal />
+    </>
+  );
 };
