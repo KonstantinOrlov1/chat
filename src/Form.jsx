@@ -7,13 +7,18 @@ export const Form = () => {
   const url = "ws://localhost:3001";
 
   const [data, setData] = useState({});
-  const [exit, setExit] = useState([]);
+  const [exit, setExit] = useState({});
 
   const socket = useRef();
   const textareaField = useRef();
 
   const createExit = (text) => {
-    setExit((v) => [...v, text]);
+    const id = Date.now();
+
+    setExit((v) => ({
+      ...v,
+      [id]: text,
+    }));
   };
 
   const createMessege = (text, external) => {
@@ -75,11 +80,11 @@ export const Form = () => {
           })}
         </div>
 
-        {exit.length === 0 ? null : (
+        {Object.keys(exit).length === 0 ? null : (
           <div className="exit_container">
-            {exit.map((elem, index) => (
-              <Exit key={index} text={elem} />
-            ))}
+            {Object.keys(exit).map((id, index) => {
+              return <Exit text={exit[id]} key={index} />;
+            })}
           </div>
         )}
       </div>
